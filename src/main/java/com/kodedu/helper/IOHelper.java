@@ -638,11 +638,8 @@ public class IOHelper {
                 } else {
                     //guess installation path
                     CodeSource codeSource = ApplicationController.class.getProtectionDomain().getCodeSource();
-                    String codeSourceLocation = codeSource.getLocation().toString();
-                    String codeSourceJar = codeSourceLocation
-                            .replace("jar:nested:/", "")
-                            .replace("/!BOOT-INF/classes/!/", "");
-                    Path jarFilePath = Path.of(codeSourceJar);
+                    URI codeSourceUri = codeSource.getLocation().toURI();
+                    Path jarFilePath = Path.of(codeSourceUri);
                     installationPath = jarFilePath.getParent().getParent();
                 }
             } catch (Exception e) {

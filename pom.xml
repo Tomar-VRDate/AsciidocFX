@@ -455,6 +455,7 @@
                         <option>--enable-preview</option>
                         <option>--add-opens java.base/sun.nio.ch=ALL-UNNAMED</option>
                         <option>--add-opens java.base/java.io=ALL-UNNAMED</option>
+                        <option>--add-opens javafx.graphics/javafx.scene.input=ALL-UNNAMED</option>
                         <option>--add-opens javafx.controls/javafx.scene.control=ALL-UNNAMED</option>
                         <option>--add-opens javafx.base/com.sun.javafx.collections=javafx.web</option>
                         <option>--add-opens javafx.base/com.sun.javafx.collections=ALL-UNNAMED</option>

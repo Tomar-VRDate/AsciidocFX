@@ -32,8 +32,9 @@ public class PdfBookConverter implements DocumentConverter<RenderResult> {
 	}
 
 
+    @SafeVarargs
     @Override
-	public void convert(boolean askPath, Consumer<RenderResult>... nextStep) {
+	public final void convert(boolean askPath, Consumer<RenderResult>... nextStep) {
 		if (PdfConverterType.ASCIIDOCTOR.equals(pdfConfigBean.getPdfConverterType())) {
 			asciidoctorPdfBookConverter.convert(askPath, nextStep);
 		} else {

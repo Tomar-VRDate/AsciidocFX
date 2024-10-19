@@ -25,10 +25,7 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.Supplier;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
-
-import static java.util.Arrays.asList;
 
 /**
  * Created by usta on 25.12.2014.
@@ -93,13 +90,14 @@ public class DirectoryServiceImpl implements DirectoryService {
 
     /**
      * Resolve a file to a valid base browsing directory
+     *
      * @param referenceFile The base directory or a child file that should be used as a browsing base path
      * @return A valid directory's File object
      */
     private static File getChooserInitialDirectory(File referenceFile) {
         // Search for an existing directory
-        while (referenceFile != null){
-            if(Files.isDirectory(referenceFile.toPath())) {
+        while (referenceFile != null) {
+            if (Files.isDirectory(referenceFile.toPath())) {
                 return referenceFile;
             }
             referenceFile = referenceFile.getParentFile();
@@ -119,7 +117,7 @@ public class DirectoryServiceImpl implements DirectoryService {
 
         if (!Platform.isFxApplicationThread()) {
             final CompletableFuture<Path> completableFuture = new CompletableFuture<>();
-            completableFuture.runAsync(() -> {
+            CompletableFuture.runAsync(() -> {
                 threadService.runActionLater(() -> {
                     try {
                         Path path = workingDirectorySupplier();
@@ -135,7 +133,7 @@ public class DirectoryServiceImpl implements DirectoryService {
         final DirectoryChooser directoryChooser = newDirectoryChooser("Select working directory");
         final File file = directoryChooser.showDialog(null);
 
-        workingDirectory = Optional.ofNullable(file.toPath());
+        workingDirectory = Optional.of(file.toPath());
         eventService.sendEvent(DirectoryService.WORKING_DIRECTORY_UPDATE_EVENT, workingDirectory.orElse(null));
 
         return workingDirectory.orElse(null);
@@ -199,7 +197,7 @@ public class DirectoryServiceImpl implements DirectoryService {
         pathMapper.addRootPath(path);
         storedConfigBean.setWorkingDirectory(path.toString());
         this.setWorkingDirectory(Optional.of(path));
-        this.setInitialDirectory(Optional.ofNullable(path.toFile()));
+        this.setInitialDirectory(Optional.of(path.toFile()));
 
         eventService.sendEvent(DirectoryService.WORKING_DIRECTORY_UPDATE_EVENT, path);
     }
@@ -249,7 +247,7 @@ public class DirectoryServiceImpl implements DirectoryService {
         if (!Platform.isFxApplicationThread()) {
             final CompletableFuture<Path> completableFuture = new CompletableFuture<>();
 
-            completableFuture.runAsync(() -> {
+            CompletableFuture.runAsync(() -> {
                 threadService.runActionLater(() -> {
                     try {
                         Path outputPath = getSaveOutputPath(extensionFilter, askPath);
@@ -268,16 +266,19 @@ public class DirectoryServiceImpl implements DirectoryService {
         if (isNew) {
             controller.saveDoc();
         }
-
-        final Path currentTabPath = current.currentPath().get();
+        Optional<Path> optionalPath = current.currentPath();
+        if (optionalPath.isEmpty()) {
+            return null;
+        }
+        final Path currentTabPath = optionalPath.get();
         final Path currentTabPathDir = currentTabPath.getParent();
+
         String tabText = current.getCurrentTabText().replace("*", "").trim();
         tabText = tabText.contains(".") ? tabText.substring(0, tabText.lastIndexOf(".")) : tabText;
 
         if (!askPath) {
             return currentTabPathDir.resolve(extensionFilter.getExtensions().get(0).replace("*", tabText));
         }
-
         final FileChooser fileChooser = this.newFileChooser(String.format("Save %s file", extensionFilter.getDescription()));
         fileChooser.getExtensionFilters().addAll(extensionFilter);
         File file = fileChooser.showSaveDialog(null);
@@ -329,7 +330,7 @@ public class DirectoryServiceImpl implements DirectoryService {
 
     @Override
     public Path findPathInPublic(String finalUri) {
-        List<String> uris = asList(finalUri, finalUri.replaceFirst("/", "")).stream().collect(Collectors.toList());
+        List<String> uris = Stream.of(finalUri, finalUri.replaceFirst("/", "")).toList();
         Path result = null;
         for (String uri : uris) {
             Path configPath = controller.getConfigPath().resolve("public");

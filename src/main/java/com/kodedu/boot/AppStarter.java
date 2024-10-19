@@ -58,16 +58,17 @@ import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
+import java.util.stream.Stream;
 
 import static java.awt.Taskbar.Feature.ICON_IMAGE;
 import static javafx.scene.input.KeyCombination.SHORTCUT_DOWN;
 
 public class AppStarter extends Application {
 
-    private static Logger logger = LoggerFactory.getLogger(AppStarter.class);
+    private static final Logger logger = LoggerFactory.getLogger(AppStarter.class);
 
-    private static AtomicReference<String> startupParameters = new AtomicReference<>();
-    private static CountDownLatch startupParameterLatch = new CountDownLatch(1);
+    private static final AtomicReference<String> startupParameters = new AtomicReference<>();
+    private static final CountDownLatch startupParameterLatch = new CountDownLatch(1);
 
     private static ApplicationController controller;
     private static ConfigurableApplicationContext context;
@@ -92,7 +93,7 @@ public class AppStarter extends Application {
             try {
                 startApp(stage);
             } catch (final Throwable e) {
-                logger.error("Problem occured while starting AsciidocFX", e);
+                logger.error("Problem occurred while starting AsciidocFX", e);
             }
         });
 
@@ -147,21 +148,30 @@ public class AppStarter extends Application {
     }
 
     public void loadRequiredFonts() {
-        try {
-            Files.walk(IOHelper.getInstallationPath().resolve("conf/fonts"))
-                    .filter(f -> f.toString().endsWith(".ttf"))
-                    .forEach(font -> {
-                        try (var in = new FileInputStream(font.toFile())) {
-                            IntStream.range(8, 32)
-                                    .forEach(size -> {
-                                        Font.loadFont(in, size);
-                                    });
-                        } catch (IOException e) {
-                            logger.error("Error when loading font {}", font, e);
-                        }
+        Path installationPath = IOHelper.getInstallationPath();
+        if (installationPath == null) {
+            logger.warn("Problem occurred while loading fonts installation path not found");
+            return;
+        }
+        Path fontsPath = installationPath.resolve("conf/fonts");
+        logger.info("loading fonts from {}", fontsPath.toAbsolutePath());
+        try (Stream<Path> pathStream = Files.walk(fontsPath)) {
+            pathStream.filter(f -> f.toString().endsWith(".ttf"))
+                    .forEach(AppStarter::loadRequiredFont);
+        } catch (IOException e) {
+            logger.warn("Problem occurred while loading fonts", e);
+        }
+    }
+
+    private static void loadRequiredFont(Path font) {
+        logger.info("loading font from {}", font.toAbsolutePath());
+        try (var in = new FileInputStream(font.toFile())) {
+            IntStream.range(8, 32)
+                    .forEach(size -> {
+                        Font.loadFont(in, size);
                     });
         } catch (IOException e) {
-            logger.warn("Couldn't load fonts", e);
+            logger.error("Problem occurred while loading font from {}", font.toAbsolutePath(), e);
         }
     }
 
@@ -280,7 +290,7 @@ public class AppStarter extends Application {
                 controller.waitAdocPreviewReadyLatch();
                 registerStartupListener(config);
             } catch (Exception e) {
-                logger.error("Problem occured in startup listener", e);
+                logger.error("Problem occurred in startup listener", e);
             }
         });
 

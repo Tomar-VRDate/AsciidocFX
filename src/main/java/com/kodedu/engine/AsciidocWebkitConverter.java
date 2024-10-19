@@ -98,7 +98,7 @@ public class AsciidocWebkitConverter extends ViewPanel implements AsciidocConver
             try {
                 getWindow().call("fillOutlines", doc);
             } catch (Exception e) {
-                logger.debug("Problem occured while filling outlines", e);
+                logger.debug("Problem occurred while filling outlines", e);
             }
         });
     }
@@ -124,7 +124,7 @@ public class AsciidocWebkitConverter extends ViewPanel implements AsciidocConver
         try {
             return (String) getWindow().call("apply_replacements", asciidoc);
         } catch (Exception e) {
-            logger.debug("Problem occured while applying replacements", e);
+            logger.debug("Problem occurred while applying replacements", e);
         }
 
         return asciidoc;

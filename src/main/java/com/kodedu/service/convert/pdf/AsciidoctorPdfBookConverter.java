@@ -54,8 +54,9 @@ public class AsciidoctorPdfBookConverter implements DocumentConverter<RenderResu
     }
 
 
+    @SafeVarargs
     @Override
-	public void convert(boolean askPath, Consumer<RenderResult>... nextStep) {
+	public final void convert(boolean askPath, Consumer<RenderResult>... nextStep) {
 
 		String asciidoc = current.currentEditorValue();
 
@@ -87,7 +88,7 @@ public class AsciidoctorPdfBookConverter implements DocumentConverter<RenderResu
 				asciiDocController.addRemoveRecentList(pdfPath);
 				onSuccessfulConversation(nextStep, destFile);
 			} catch (Exception e) {
-				logger.error("Problem occured while converting to PDF", e);
+				logger.error("Problem occurred while converting to PDF", e);
 				onFailedConversation(nextStep, e);
 			} finally {
 				indikatorService.stopProgressBar();

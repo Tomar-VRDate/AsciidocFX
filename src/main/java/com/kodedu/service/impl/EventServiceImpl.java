@@ -34,7 +34,7 @@ public class EventServiceImpl implements EventService {
     /**
      * Logger for {@link EventServiceImpl}
      */
-    private static Logger logger = LoggerFactory.getLogger(EventServiceImpl.class);
+    private static final Logger logger = LoggerFactory.getLogger(EventServiceImpl.class);
 
     /**
      * The thread service instance to use when scheduling notifications
@@ -52,7 +52,7 @@ public class EventServiceImpl implements EventService {
             try {
                 consumer.accept(event);
             } catch (Exception e) {
-                logger.debug(String.format("An exception occured while dispatching an event with label %s", label), e);
+                logger.debug(String.format("An exception occurred while dispatching an event with label %s", label), e);
             }
         }));
     }
@@ -67,11 +67,11 @@ public class EventServiceImpl implements EventService {
         String labelExplorer = "";
         synchronized (subscriptionsMap) {
             for(String scope: eventLabel.split(EVENT_SCOPE_SEPARATOR)) {
-                labelExplorer += (labelExplorer.length()>0 ? EVENT_SCOPE_SEPARATOR : "") + scope;
+                labelExplorer += (!labelExplorer.isEmpty() ? EVENT_SCOPE_SEPARATOR : "") + scope;
                 if(subscriptionsMap.containsKey(labelExplorer)) {
                     matchSet.addAll(
                             subscriptionsMap.get(labelExplorer).stream()
-                            .map(s -> s.getConsumer())
+                            .map(Subscription::getConsumer)
                             .collect(Collectors.toCollection(HashSet::new)));
                 }
             }
@@ -104,7 +104,7 @@ public class EventServiceImpl implements EventService {
         if(!isLabelValid(eventLabel)) {
             // FIXME: Should throw an extension of IllegalFormatException
             IllegalArgumentException exception = new IllegalArgumentException(String.format("%s%s", "Invalid event label received: ", eventLabel));
-            //logger.error("Subscription error", exception);
+            logger.error("Subscription error", exception);
             throw exception;
         }
 
@@ -127,12 +127,11 @@ public class EventServiceImpl implements EventService {
      */
     @Override
     public void unsubscribe(EventService.Subscription subscription) {
-        if (!(subscription instanceof Subscription)) {
+        if (!(subscription instanceof Subscription internalSubscription)) {
             // Might happen if several EventService implementations are provided and swap between one another
             logger.error("Attempted to cancel a subscription provided by a different EventService Implementation");
             return;
         }
-        Subscription internalSubscription = (Subscription) subscription;
         String subscriptionLabel = internalSubscription.getLabel();
         synchronized (subscriptionsMap) {
             if(subscriptionsMap.containsKey(subscriptionLabel)) {
@@ -148,7 +147,7 @@ public class EventServiceImpl implements EventService {
         logger.error(String.format("%s%s", "Attempted to cancel a subscription but it could not be found for label ", internalSubscription.getLabel() ));
     }
 
-    private class Event implements EventService.Event {
+    private static class Event implements EventService.Event {
         /**
          * The Event's label
          */
@@ -201,20 +200,20 @@ public class EventServiceImpl implements EventService {
 
     }
 
-    private class Subscription implements EventService.Subscription {
+    private static class Subscription implements EventService.Subscription {
         /**
          * The Event label handled by the subscription
          */
-        private String label;
+        private final String label;
         /**
          * The Consumer used by the subscriptions
          */
-        private Consumer<EventService.Event> consumer;
+        private final Consumer<EventService.Event> consumer;
 
         /**
          * Constructor
-         * @param label
-         * @param consumer
+         * @param label The Event's Subscription label
+         * @param consumer The Event's EventService.Event Subscription consumer
          */
         public Subscription(String label, Consumer<EventService.Event> consumer) {
             this.label = label;

@@ -72,7 +72,7 @@ public class PathResolverServiceImpl implements PathResolverService {
 
     @Override
     public boolean isViewable(Path path) {
-        return true || Files.isDirectory(path)
+        return Files.isDirectory(path)
                 || isAsciidoc(path)
                 || isImage(path)
                 || isPDF(path)
@@ -81,7 +81,6 @@ public class PathResolverServiceImpl implements PathResolverService {
                 || isHTML(path)
                 || isXML(path)
                 || isMarkdown(path);
-
     }
 
     @Override

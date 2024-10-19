@@ -5,14 +5,14 @@
 
     <groupId>com.kodedu</groupId>
     <artifactId>AsciidocFX</artifactId>
-    <version>1.8.10</version>
+    <version>1.8.11</version>
     <packaging>jar</packaging>
 
     <name>AsciidocFX</name>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <java.version>21</java.version>
+        <java.version>23</java.version>
         <maven.compiler.source>${java.version}</maven.compiler.source>
         <maven.compiler.target>${java.version}</maven.compiler.target>
         <mainClass>com.kodedu.boot.AppStarter</mainClass>
@@ -22,12 +22,14 @@
         <install4j.macKeyStorePassword>${env.MAC_KEYSTORE_PASSWORD}</install4j.macKeyStorePassword>
         <install4j.appSpecificPassword>${env.MAC_APP_PASSWORD}</install4j.appSpecificPassword>
         <install4j.winKeyStorePassword>${env.WIN_KEYSTORE_PASSWORD}</install4j.winKeyStorePassword>
-        <openjfx.version>22.0.1</openjfx.version>
+        <openjfx.version>${java.version}.0.1</openjfx.version>
+        <!--        <openjfx-monocle.version>jdk-${openjfx.version}</openjfx-monocle.version>-->
         <openjfx-monocle.version>jdk-21.0.1</openjfx-monocle.version>
         <ikonli.version>12.3.1</ikonli.version>
         <jaxb.version>2.3.2</jaxb.version>
-        <jacoco.version>0.8.7</jacoco.version>
+        <jacoco.version>0.8.12</jacoco.version>
         <logunit.version>1.1.0</logunit.version>
+        <spring-boot.version>3.3.2</spring-boot.version>
     </properties>
 
     <organization>
@@ -37,7 +39,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>3.3.1</version>
+        <version>3.3.2</version>
     </parent>
 
     <dependencies>
@@ -59,7 +61,7 @@
         <dependency>
             <groupId>org.eclipse.parsson</groupId>
             <artifactId>jakarta.json</artifactId>
-            <version>1.1.1</version>
+            <version>1.1.6</version>
         </dependency>
         <dependency>
             <groupId>com.dooapp.fxform2</groupId>
@@ -101,7 +103,8 @@
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-undertow</artifactId>
+            <!--<artifactId>spring-boot-starter-undertow</artifactId>-->
+            <artifactId>spring-boot-starter-jetty</artifactId>
             <exclusions>
                 <exclusion>
                     <artifactId>jboss-annotations-api_1.2_spec</artifactId>
@@ -153,7 +156,7 @@
             <artifactId>zt-exec</artifactId>
             <version>1.10</version>
         </dependency>
-<!--        https://github.com/asciidoctor/asciidoctor-diagram/blob/master/deps/plantuml/lib/asciidoctor-diagram/plantuml/plantuml.jar-->
+        <!--        https://github.com/asciidoctor/asciidoctor-diagram/blob/master/deps/plantuml/lib/asciidoctor-diagram/plantuml/plantuml.jar-->
         <dependency>
             <groupId>net.sourceforge.plantuml</groupId>
             <artifactId>plantuml</artifactId>
@@ -162,14 +165,14 @@
         <dependency>
             <groupId>org.apache.xmlgraphics</groupId>
             <artifactId>batik-codec</artifactId>
-            <version>1.16</version>
+            <version>1.17</version>
         </dependency>
         <dependency>
             <groupId>de.tototec</groupId>
             <artifactId>de.tototec.cmdoption</artifactId>
             <version>0.7.1</version>
         </dependency>
-<!--        https://github.com/asciidoctor/asciidoctor-diagram/tree/master/deps/plantuml/lib/asciidoctor-diagram/plantuml-->
+        <!--        https://github.com/asciidoctor/asciidoctor-diagram/tree/master/deps/plantuml/lib/asciidoctor-diagram/plantuml-->
         <dependency>
             <groupId>org.scilab.forge</groupId>
             <artifactId>jlatexmath</artifactId>
@@ -254,17 +257,17 @@
         <dependency>
             <groupId>org.asciidoctor</groupId>
             <artifactId>asciidoctorj</artifactId>
-            <version>2.5.11</version>
+            <version>2.5.13</version>
         </dependency>
         <dependency>
             <groupId>org.asciidoctor</groupId>
             <artifactId>asciidoctorj-pdf</artifactId>
-            <version>2.3.10</version>
+            <version>2.3.17</version>
         </dependency>
         <dependency>
             <groupId>org.asciidoctor</groupId>
             <artifactId>asciidoctorj-epub3</artifactId>
-            <version>1.5.1</version>
+            <version>2.1.0</version>
         </dependency>
         <dependency>
             <groupId>org.asciidoctor</groupId>
@@ -274,7 +277,7 @@
         <dependency>
             <groupId>org.asciidoctor</groupId>
             <artifactId>asciidoctorj-diagram</artifactId>
-            <version>2.2.14</version>
+            <version>2.3.1</version>
         </dependency>
 
         <dependency>
@@ -326,13 +329,13 @@
             <artifactId>logunit-core</artifactId>
             <version>${logunit.version}</version>
             <scope>test</scope>
-         </dependency>
+        </dependency>
         <dependency>
             <groupId>io.github.netmikey.logunit</groupId>
             <artifactId>logunit-logback</artifactId>
             <version>${logunit.version}</version>
             <scope>test</scope>
-         </dependency>
+        </dependency>
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter-api</artifactId>
@@ -346,19 +349,19 @@
             <scope>test</scope>
         </dependency>
         <dependency>
-           <groupId>org.springframework.boot</groupId>
-           <artifactId>spring-boot-starter-test</artifactId>
-           <scope>test</scope>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
         </dependency>
-<!--        <dependency>-->
-<!--            <groupId>io.github.crac</groupId>-->
-<!--            <artifactId>org-crac</artifactId>-->
-<!--            <version>0.1.3</version>-->
-<!--        </dependency>-->
-<!--        <dependency>-->
-<!--            <groupId>org.springframework.boot</groupId>-->
-<!--            <artifactId>spring-boot-starter-actuator</artifactId>-->
-<!--        </dependency>-->
+        <!--        <dependency>-->
+        <!--            <groupId>io.github.crac</groupId>-->
+        <!--            <artifactId>org-crac</artifactId>-->
+        <!--            <version>0.1.3</version>-->
+        <!--        </dependency>-->
+        <!--        <dependency>-->
+        <!--            <groupId>org.springframework.boot</groupId>-->
+        <!--            <artifactId>spring-boot-starter-actuator</artifactId>-->
+        <!--        </dependency>-->
         <dependency>
             <groupId>org.testfx</groupId>
             <artifactId>testfx-junit5</artifactId>
@@ -378,15 +381,14 @@
         <finalName>AsciidocFX</finalName>
 
         <plugins>
-            <!--            <plugin>
-                            <groupId>org.springframework.boot</groupId>
-                            <artifactId>spring-boot-maven-plugin</artifactId>
-                            <version>${spring-boot.version}</version>
-                            <configuration>
-                                <mainClass>com.kodedu.boot.AppStarter</mainClass>
-                            </configuration>
-                        </plugin>-->
-
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+                <version>${spring-boot.version}</version>
+                <configuration>
+                    <mainClass>${mainClass}</mainClass>
+                </configuration>
+            </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
@@ -408,8 +410,17 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-jar-plugin</artifactId>
+                <version>3.4.2</version>
+                <configuration>
+                    <archive>
+                        <manifest>
+                            <addClasspath>true</addClasspath>
+                            <mainClass>${mainClass}</mainClass>
+                        </manifest>
+                    </archive>
+                </configuration>
             </plugin>
-               <!-- Test reporting -->
+            <!-- Test reporting -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
@@ -433,23 +444,23 @@
                     </execution>
                 </executions>
             </plugin>
-<!--            Remove scope=provided for javafx dependencies to run via javafx plugin-->
-<!--            <plugin>-->
-<!--                <groupId>org.openjfx</groupId>-->
-<!--                <artifactId>javafx-maven-plugin</artifactId>-->
-<!--                <version>0.0.8</version>-->
-<!--                <configuration>-->
-<!--                    <mainClass>com.kodedu.boot.AppStarter</mainClass>-->
-<!--                    <options>-->
-<!--                        <option>&#45;&#45;enable-preview</option>-->
-<!--                        <option>&#45;&#45;add-opens java.base/sun.nio.ch=ALL-UNNAMED</option>-->
-<!--                        <option>&#45;&#45;add-opens java.base/java.io=ALL-UNNAMED</option>-->
-<!--                        <option>&#45;&#45;add-opens javafx.controls/javafx.scene.control=ALL-UNNAMED</option>-->
-<!--                        <option>&#45;&#45;add-opens javafx.base/com.sun.javafx.collections=javafx.web</option>-->
-<!--                        <option>&#45;&#45;add-opens javafx.base/com.sun.javafx.collections=ALL-UNNAMED</option>-->
-<!--                    </options>-->
-<!--                </configuration>-->
-<!--            </plugin>-->
+            <!--            Remove scope=provided for javafx dependencies to run via javafx plugin-->
+            <!--            <plugin>-->
+            <!--                <groupId>org.openjfx</groupId>-->
+            <!--                <artifactId>javafx-maven-plugin</artifactId>-->
+            <!--                <version>0.0.8</version>-->
+            <!--                <configuration>-->
+            <!--                    <mainClass>${mainClass}</mainClass>-->
+            <!--                    <options>-->
+            <!--                        <option>&#45;&#45;enable-preview</option>-->
+            <!--                        <option>&#45;&#45;add-opens java.base/sun.nio.ch=ALL-UNNAMED</option>-->
+            <!--                        <option>&#45;&#45;add-opens java.base/java.io=ALL-UNNAMED</option>-->
+            <!--                        <option>&#45;&#45;add-opens javafx.controls/javafx.scene.control=ALL-UNNAMED</option>-->
+            <!--                        <option>&#45;&#45;add-opens javafx.base/com.sun.javafx.collections=javafx.web</option>-->
+            <!--                        <option>&#45;&#45;add-opens javafx.base/com.sun.javafx.collections=ALL-UNNAMED</option>-->
+            <!--                    </options>-->
+            <!--                </configuration>-->
+            <!--            </plugin>-->
         </plugins>
     </build>
 
@@ -473,7 +484,7 @@
                         <configuration>
                             <programs>
                                 <program>
-                                    <mainClass>com.kodedu.boot.AppStarter</mainClass>
+                                    <mainClass>${mainClass}</mainClass>
                                     <id>asciidocfx</id>
                                 </program>
                             </programs>
@@ -613,6 +624,46 @@
                             </execution>
                         </executions>
                     </plugin>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-assembly-plugin</artifactId>
+                        <version>3.7.0</version>
+                        <executions>
+                            <execution>
+                                <phase>package</phase>
+                                <goals>
+                                    <goal>single</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                        <configuration>
+                            <archive>
+                                <manifest>
+                                    <addClasspath>true</addClasspath>
+                                    <mainClass>${mainClass}</mainClass>
+                                </manifest>
+                            </archive>
+                            <descriptorRefs>
+                                <descriptorRef>jar-with-dependencies</descriptorRef>
+                            </descriptorRefs>
+                        </configuration>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.codehaus.mojo</groupId>
+                        <artifactId>exec-maven-plugin</artifactId>
+                        <version>3.3.0</version>
+                        <executions>
+                            <execution>
+                                <id>java</id>
+                                <goals>
+                                    <goal>java</goal>
+                                </goals>
+                                <configuration>
+                                    <mainClass>${mainClass}</mainClass>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
                 </plugins>
             </build>
         </profile>
@@ -675,15 +726,15 @@
             </releases>
             <url>https://github.com/javaterminal/TerminalFX/raw/master/releases</url>
         </repository>
-<!--        <repository>-->
-<!--            <id>javacomm-repo</id>-->
-<!--            <releases>-->
-<!--                <enabled>true</enabled>-->
-<!--                <checksumPolicy>warn</checksumPolicy>-->
-<!--                <updatePolicy>always</updatePolicy>-->
-<!--            </releases>-->
-<!--            <url>https://www.sparetimelabs.com/maven2</url>-->
-<!--        </repository>-->
+        <!--        <repository>-->
+        <!--            <id>javacomm-repo</id>-->
+        <!--            <releases>-->
+        <!--                <enabled>true</enabled>-->
+        <!--                <checksumPolicy>warn</checksumPolicy>-->
+        <!--                <updatePolicy>always</updatePolicy>-->
+        <!--            </releases>-->
+        <!--            <url>https://www.sparetimelabs.com/maven2</url>-->
+        <!--        </repository>-->
         <repository>
             <id>jcenter-central</id>
             <name>jcenter</name>

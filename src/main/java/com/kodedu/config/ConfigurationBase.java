@@ -4,7 +4,11 @@ import com.kodedu.boot.AppStarter;
 import com.kodedu.controller.ApplicationController;
 import com.kodedu.helper.IOHelper;
 import com.kodedu.service.ThreadService;
-import jakarta.json.*;
+import jakarta.json.Json;
+import jakarta.json.JsonObject;
+import jakarta.json.JsonStructure;
+import jakarta.json.JsonWriter;
+import jakarta.json.stream.JsonGenerator;
 import javafx.animation.FadeTransition;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
@@ -17,7 +21,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 
-import jakarta.json.stream.JsonGenerator;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
@@ -26,7 +29,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
@@ -43,6 +45,7 @@ public abstract class ConfigurationBase {
 
     protected final ApplicationController controller;
     protected final ThreadService threadService;
+    protected Path userHomeConfigPath;
 
     public abstract String formName();
 
@@ -55,16 +58,27 @@ public abstract class ConfigurationBase {
     public static ObjectProperty<Path> configRootLocation = new SimpleObjectProperty<>();
 
     public Path getConfigRootLocation() {
+        if (Objects.isNull(configRootLocation.get())) {
+            String userHome = System.getProperty("user.home");
+            if (Objects.nonNull(userHome)) {
+                Path userHomePath = IOHelper.getPath(userHome);
+                if (Objects.nonNull(userHomePath)) {
+                    userHomeConfigPath = userHomePath.resolve(userHomeConfigFolder);
 
-        String userHome = System.getProperty("user.home");
+                    IOHelper.createDirectories(userHomeConfigPath);
 
-        Path userHomeConfigPath = IOHelper.getPath(userHome).resolve(userHomeConfigFolder);
+                    setConfigRootLocation(userHomeConfigPath);
 
-        IOHelper.createDirectories(userHomeConfigPath);
-
-        setConfigRootLocation(userHomeConfigPath);
-
-        return userHomeConfigPath;
+                    logger.info("Configuration root from User Home System Path {}", userHomeConfigPath.toAbsolutePath());
+                    return userHomeConfigPath;
+                } else {
+                    logger.error("Problem occurred while loading configuration root from User Home System Path not found");
+                }
+            } else {
+                logger.error("Problem occurred while loading configuration root from User Home System Property not found");
+            }
+        }
+        return configRootLocation.get();
     }
 
     public ObjectProperty<Path> configRootLocationProperty() {
@@ -91,8 +105,13 @@ public abstract class ConfigurationBase {
         configPath = configRootLocation.resolve(fileName);
 
         if (Files.notExists(configPath)) {
-            Path defaultConfigPath = getConfigDirectory().resolve(fileName);
-            IOHelper.copy(defaultConfigPath, configPath);
+            Path configDirectory = getConfigDirectory();
+            if (Objects.nonNull(configDirectory)) {
+                Path defaultConfigPath = configDirectory.resolve(fileName);
+                IOHelper.copy(defaultConfigPath, configPath);
+            } else {
+                logger.warn("Problem occurred while resolving Config Path for {} Config directory not found", fileName);
+            }
         }
 
         return configPath;
@@ -138,7 +157,7 @@ public abstract class ConfigurationBase {
              JsonWriter jsonWriter = Json.createWriterFactory(properties).createWriter(fileWriter);) {
             jsonWriter.write(jsonStructure);
         } catch (Exception e) {
-            logger.error("Problem occured while saving {}", this.getClass().getSimpleName(), e);
+            logger.error("Problem occurred while saving {}", this.getClass().getSimpleName(), e);
         }
     }
 

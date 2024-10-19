@@ -59,7 +59,7 @@ public class IOHelper {
         ) {
             out.write(content);
         } catch (Exception e) {
-            logger.error("Problem occured while writing to {}", path, e);
+            logger.error("Problem occurred while writing to {}", path, e);
             return Optional.of(e);
         }
         pathCharsetMap.put(path, charset);
@@ -70,7 +70,7 @@ public class IOHelper {
         try {
             Files.write(path, content, openOption);
         } catch (Exception e) {
-            logger.error("Problem occured while writing {}", path, e);
+            logger.error("Problem occurred while writing {}", path, e);
         }
     }
 
@@ -96,7 +96,7 @@ public class IOHelper {
             content = IOUtils.toString(bytes, finalCharset.name());
 
         } catch (Exception e) {
-            logger.error("Problem occured while reading file {}", path, e);
+            logger.error("Problem occurred while reading file {}", path, e);
             throw new RuntimeException(e);
         }
         return content;
@@ -157,7 +157,7 @@ public class IOHelper {
         try {
             Files.createDirectories(path);
         } catch (Exception e) {
-            logger.error("Problem occured while creating directories {}", path, e);
+            logger.error("Problem occurred while creating directories {}", path, e);
         }
 
     }
@@ -166,7 +166,7 @@ public class IOHelper {
         try {
             return Files.createTempFile("asciidoc-temp", suffix);
         } catch (Exception e) {
-            logger.error("Problem occured while creating temp file", e);
+            logger.error("Problem occurred while creating temp file", e);
         }
 
         return null;
@@ -180,7 +180,7 @@ public class IOHelper {
         try {
             return Files.createTempFile(path, prefix, suffix);
         } catch (Exception e) {
-            logger.error("Problem occured while creating temp file {}", path, e);
+            logger.error("Problem occurred while creating temp file {}", path, e);
         }
 
         return null;
@@ -198,7 +198,7 @@ public class IOHelper {
         try {
             Files.copy(source, target, copyOptions);
         } catch (Exception e) {
-            logger.error("Problem occured while copying {} to {}", source, target, e);
+            logger.error("Problem occurred while copying {} to {}", source, target, e);
         }
     }
 
@@ -206,7 +206,7 @@ public class IOHelper {
         try {
             return path.toUri().toURL().toString();
         } catch (Exception e) {
-            logger.error("Problem occured while getting URL of {}", path, e);
+            logger.error("Problem occurred while getting URL of {}", path, e);
         }
         return null;
     }
@@ -215,7 +215,7 @@ public class IOHelper {
         try {
             return Files.list(path);
         } catch (Exception e) {
-            logger.error("Problem occured while listing {}", path, e);
+            logger.error("Problem occurred while listing {}", path, e);
         }
         return Stream.empty();
     }
@@ -228,7 +228,7 @@ public class IOHelper {
             }
             ImageIO.write(bufferedImage, format, output);
         } catch (Exception e) {
-            logger.error("Problem occured while writing buff image to {}", output, e);
+            logger.error("Problem occurred while writing buff image to {}", output, e);
         }
     }
 
@@ -236,7 +236,7 @@ public class IOHelper {
         try {
             return Files.readAllBytes(path);
         } catch (Exception e) {
-            logger.error("Problem occured while reading {}", path, e);
+            logger.error("Problem occurred while reading {}", path, e);
         }
         return new byte[]{};
     }
@@ -245,7 +245,7 @@ public class IOHelper {
         try {
             Files.move(source, target, option);
         } catch (Exception e) {
-            logger.error("Problem occured while moving {} to {}", source, target, e);
+            logger.error("Problem occurred while moving {} to {}", source, target, e);
         }
     }
 
@@ -253,7 +253,7 @@ public class IOHelper {
         try {
             return JOOX.$(inputSource);
         } catch (SAXException | IOException e) {
-            logger.error("Problem occured while selecting Match", e);
+            logger.error("Problem occurred while selecting Match", e);
         }
         return null;
     }
@@ -262,7 +262,7 @@ public class IOHelper {
         try {
             return JOOX.$(file);
         } catch (SAXException | IOException e) {
-            logger.error("Problem occured while selecting Match for {}", file, e);
+            logger.error("Problem occurred while selecting Match for {}", file, e);
         }
         return JOOX.$();
     }
@@ -271,7 +271,7 @@ public class IOHelper {
         try {
             transformer.transform(xmlSource, streamResult);
         } catch (TransformerException e) {
-            logger.error("Problem occured while transforming XML Source to Stream result", e);
+            logger.error("Problem occurred while transforming XML Source to Stream result", e);
 
         }
     }
@@ -280,7 +280,7 @@ public class IOHelper {
         try {
             root.write(file);
         } catch (Exception e) {
-            logger.error("Problem occured while writing XML Match to {}", file, e);
+            logger.error("Problem occurred while writing XML Match to {}", file, e);
         }
     }
 
@@ -288,7 +288,7 @@ public class IOHelper {
         try {
             FileUtils.copyDirectoryToDirectory(source, target);
         } catch (Exception e) {
-            logger.error("Problem occured while copying {} to {}", source, target, e);
+            logger.error("Problem occurred while copying {} to {}", source, target, e);
         }
     }
 
@@ -296,7 +296,7 @@ public class IOHelper {
         try {
             Files.deleteIfExists(path);
         } catch (Exception e) {
-            logger.error("Problem occured while deleting {}", path, e);
+            logger.error("Problem occurred while deleting {}", path, e);
             return Optional.ofNullable(e);
         }
 
@@ -307,7 +307,7 @@ public class IOHelper {
         try {
             FileUtils.copyDirectory(sourceDir.toFile(), targetDir.toFile());
         } catch (Exception e) {
-            logger.error("Problem occured while copying {} to {}", sourceDir, targetDir, e);
+            logger.error("Problem occurred while copying {} to {}", sourceDir, targetDir, e);
         }
     }
 
@@ -320,7 +320,7 @@ public class IOHelper {
         try (Stream<Path> pathStream = Files.find(start, maxDepth, matcher, options);) {
             return pathStream.collect(Collectors.toList()).stream();
         } catch (Exception e) {
-            logger.error("Problem occured while finding in path {}", start, e);
+            logger.error("Problem occurred while finding in path {}", start, e);
         }
         return Stream.empty();
     }
@@ -329,7 +329,7 @@ public class IOHelper {
         try {
             return Files.exists(path) && (Files.isHidden(path) || path.getFileName().toString().startsWith("."));
         } catch (Exception e) {
-//            logger.error("Problem occured while detecting hidden path {}", path, e);
+//            logger.error("Problem occurred while detecting hidden path {}", path, e);
         }
         return false;
     }
@@ -338,7 +338,7 @@ public class IOHelper {
         try {
             FileUtils.copyFileToDirectory(file, directory);
         } catch (Exception e) {
-            logger.error("Problem occured while copying {} to {}", file, directory, e);
+            logger.error("Problem occurred while copying {} to {}", file, directory, e);
         }
     }
 
@@ -346,7 +346,7 @@ public class IOHelper {
         try {
             FileUtils.copyFile(file, dest);
         } catch (Exception e) {
-            logger.error("Problem occured while copying {} to {}", file, dest, e);
+            logger.error("Problem occurred while copying {} to {}", file, dest, e);
         }
     }
 
@@ -354,7 +354,7 @@ public class IOHelper {
         try {
             Files.createDirectory(path);
         } catch (Exception e) {
-            logger.error("Problem occured while creating {} path", path, e);
+            logger.error("Problem occurred while creating {} path", path, e);
         }
     }
 
@@ -392,7 +392,7 @@ public class IOHelper {
                 }
             });
         } catch (Exception e) {
-            logger.error("Problem occured while deleting {} path", path, e);
+            logger.error("Problem occurred while deleting {} path", path, e);
         }
     }
 
@@ -422,7 +422,7 @@ public class IOHelper {
         } catch (FileNotFoundException fnx) {
             return Optional.empty();
         } catch (Exception e) {
-            logger.error("Problem occured while deleting {}", path, e);
+            logger.error("Problem occurred while deleting {}", path, e);
             return Optional.ofNullable(e);
         }
         return Optional.empty();
@@ -432,7 +432,7 @@ public class IOHelper {
         try {
             return Files.readAllLines(path);
         } catch (Exception e) {
-            logger.error("Problem occured while reading {} path", path, e);
+            logger.error("Problem occurred while reading {} path", path, e);
         }
         return new ArrayList<>();
     }
@@ -442,7 +442,7 @@ public class IOHelper {
             FileInputStream fileInputStream = new FileInputStream(path.toFile());
             return new InputStreamReader(fileInputStream, "UTF-8");
         } catch (Exception e) {
-            logger.error("Problem occured while creating FileReader for {} path", path, e);
+            logger.error("Problem occurred while creating FileReader for {} path", path, e);
         }
         return null;
     }
@@ -453,7 +453,7 @@ public class IOHelper {
             try {
                 closeable.close();
             } catch (Exception e) {
-//                logger.error("Problem occured while closing resource");
+//                logger.error("Problem occurred while closing resource");
             }
         }
     }
@@ -480,7 +480,7 @@ public class IOHelper {
         try {
             return Files.createTempDirectory(path, prefix, attrs);
         } catch (Exception e) {
-            logger.error("Problem occured while creating temp directory");
+            logger.error("Problem occurred while creating temp directory");
         }
 
         return null;
@@ -504,7 +504,7 @@ public class IOHelper {
         try (DirectoryStream<Path> dirStream = Files.newDirectoryStream(path)) {
             return !dirStream.iterator().hasNext();
         } catch (Exception e) {
-//            logger.warn("Problem occured while checking is directory empty {}", path);
+//            logger.warn("Problem occurred while checking is directory empty {}", path);
         }
         return false;
     }
@@ -513,7 +513,7 @@ public class IOHelper {
         try {
             return FileSystems.getDefault().newWatchService();
         } catch (Exception e) {
-            logger.warn("Problem occured while creating new watch service");
+            logger.warn("Problem occurred while creating new watch service");
         }
         return null;
     }
@@ -523,7 +523,7 @@ public class IOHelper {
             long size = Files.size(path);
             return Optional.of(size);
         } catch (Exception e) {
-            logger.warn("Problem occured while getting size info of {}", path);
+            logger.warn("Problem occurred while getting size info of {}", path);
         }
         return Optional.empty();
     }
@@ -554,7 +554,7 @@ public class IOHelper {
         try {
             return Files.walk(path);
         } catch (Exception e) {
-            logger.warn("Problem occured while walking path {}", path);
+            logger.warn("Problem occurred while walking path {}", path);
         }
         return Stream.empty();
     }
@@ -563,7 +563,7 @@ public class IOHelper {
         try {
             return Files.walk(path, depth);
         } catch (Exception e) {
-            logger.warn("Problem occured while walking path {}", path);
+            logger.warn("Problem occurred while walking path {}", path);
         }
         return Stream.empty();
     }
@@ -605,11 +605,10 @@ public class IOHelper {
             return getPath;
         } catch (NullPointerException nlp) {
             throw nlp;
-        } catch (InvalidPathException ie){
+        } catch (InvalidPathException ie) {
             return Paths.get(URI.create(path));
-        }
-        catch (Exception e) {
-            e.printStackTrace();
+        } catch (Exception e) {
+            logger.warn("Problem occurred while getting path {}", path);
         }
         return null;
     }
@@ -639,11 +638,15 @@ public class IOHelper {
                 } else {
                     //guess installation path
                     CodeSource codeSource = ApplicationController.class.getProtectionDomain().getCodeSource();
-                    File jarFile = new File(codeSource.getLocation().toURI().getPath());
-                    installationPath = jarFile.toPath().getParent().getParent();
+                    String codeSourceLocation = codeSource.getLocation().toString();
+                    String codeSourceJar = codeSourceLocation
+                            .replace("jar:nested:/", "")
+                            .replace("/!BOOT-INF/classes/!/", "");
+                    Path jarFilePath = Path.of(codeSourceJar);
+                    installationPath = jarFilePath.getParent().getParent();
                 }
             } catch (Exception e) {
-                logger.error("Problem occured while resolving conf and log paths", e);
+                logger.error("Problem occurred while resolving conf and log paths", e);
             }
         }
         return installationPath;

@@ -72,8 +72,9 @@ public class FopPdfBookConverter implements DocumentConverter<RenderResult> {
     }
 
 
+    @SafeVarargs
     @Override
-    public void convert(boolean askPath, Consumer<RenderResult>... nextStep) {
+    public final void convert(boolean askPath, Consumer<RenderResult>... nextStep) {
 
         final Path currentTabPath = current.currentPath().get();
         final Path currentTabPathDir = currentTabPath.getParent();
@@ -124,7 +125,7 @@ public class FopPdfBookConverter implements DocumentConverter<RenderResult> {
                     onSuccessfulConversation(nextStep, pdfPath.toFile());
 
                 } catch (Exception e) {
-                    logger.error("Problem occured while converting to PDF", e);
+                    logger.error("Problem occurred while converting to PDF", e);
                     onFailedConversation(nextStep, e);
                 } finally {
                     indikatorService.stopProgressBar();

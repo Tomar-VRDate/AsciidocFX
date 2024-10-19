@@ -59,8 +59,9 @@ public class DocBookConverter implements DocbookTraversable, DocumentConverter<R
     }
 
 
+    @SafeVarargs
     @Override
-    public void convert(boolean askPath, Consumer<RenderResult>... nextStep) {
+    public final void convert(boolean askPath, Consumer<RenderResult>... nextStep) {
 
         logger.debug("Docbook5 conversion started");
 
@@ -95,7 +96,7 @@ public class DocBookConverter implements DocbookTraversable, DocumentConverter<R
                 logger.debug("Docbook5 conversion ended");
                 onSuccessfulConversation(nextStep, rendered);
             } catch (Exception e) {
-                logger.error("Problem occured while converting to Docbook", e);
+                logger.error("Problem occurred while converting to Docbook", e);
                 onFailedConversation(nextStep, e);
             } finally {
                 indikatorService.stopProgressBar();

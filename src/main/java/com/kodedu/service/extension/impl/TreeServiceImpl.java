@@ -239,7 +239,7 @@ public class TreeServiceImpl implements TreeService {
                 });
 
             } catch (Exception e) {
-                logger.error("Problem occured while generating Filesystem Tree", e);
+                logger.error("Problem occurred while generating Filesystem Tree", e);
             }
         } else {
             completed.complete(null);

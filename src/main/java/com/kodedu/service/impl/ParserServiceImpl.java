@@ -62,7 +62,7 @@ public class ParserServiceImpl implements ParserService {
             buffer.add(String.format("include::%s[]", includePath));
         });
 
-        if (buffer.size() > 0)
+        if (!buffer.isEmpty())
             return Optional.of(String.join("\n", buffer));
 
         return Optional.empty();
@@ -82,26 +82,27 @@ public class ParserServiceImpl implements ParserService {
         DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern(asciiDocController.getClipboardImageFilePattern());
         Path path = IOHelper.getPath(dateTimeFormatter.format(LocalDateTime.now()));
 
-        Path targetImage = currentPath.resolve(imagesPasteDir).resolve(path.getFileName());
+        if (Objects.nonNull(path)) {
+            Path pathFileName = path.getFileName();
+            Path targetImage = currentPath.resolve(imagesPasteDir).resolve(pathFileName);
 
-        try {
-            BufferedImage fromFXImage = SwingFXUtils.fromFXImage(image, null);
-            ImageIO.write(fromFXImage, "png", targetImage.toFile());
-        } catch (Exception e) {
-            logger.error("Image is null or is not supported {}", image.getUrl(), e);
-        }
+            try {
+                BufferedImage fromFXImage = SwingFXUtils.fromFXImage(image, null);
+                ImageIO.write(fromFXImage, "png", targetImage.toFile());
+            } catch (Exception e) {
+                logger.error("Image is null or is not supported {}", image.getUrl(), e);
+            }
 
 //        if(hasImagesDir){
 //            buffer.add(String.format("image::%s[]", path.getFileName()));
 //        }else{
-        buffer.add(String.format("image::../%s/%s[]", imagesPasteDir, path.getFileName()));
+            buffer.add(String.format("image::../%s/%s[]", imagesPasteDir, pathFileName));
 //        }
 
-        if (buffer.size() > 0)
             return Optional.of(String.join("\n", buffer));
+        }
 
         return Optional.empty();
-
     }
 
     @Override

@@ -53,7 +53,8 @@ public class SlideConverter {
         return slideType;
     }
 
-    public void convert(String rendered, Consumer<String>... nextStep) {
+    @SafeVarargs
+    public final void convert(String rendered, Consumer<String>... nextStep) {
         threadService.runActionLater(() -> {
 
             this.rendered = rendered;

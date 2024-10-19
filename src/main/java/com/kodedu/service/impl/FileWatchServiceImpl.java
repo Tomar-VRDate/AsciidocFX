@@ -43,7 +43,7 @@ public class FileWatchServiceImpl implements FileWatchService {
     @Autowired
     private ApplicationContext applicationContext;
 
-    private Map<WatchKey, Path> watchKeys = new ConcurrentHashMap<>();
+    private final Map<WatchKey, Path> watchKeys = new ConcurrentHashMap<>();
     private final PathMapper pathMapper;
 
     @Autowired
@@ -94,7 +94,7 @@ public class FileWatchServiceImpl implements FileWatchService {
             reCreateWatchService();
         }
 
-        while (true) {
+        while (!Thread.currentThread().isInterrupted()) {
 
             if (Objects.isNull(watcher)) {
                 break;
@@ -108,9 +108,7 @@ public class FileWatchServiceImpl implements FileWatchService {
                 path = watchKeys.get(watchKey);
 
             } catch (ClosedWatchServiceException cws) {
-                if (Objects.nonNull(path)) {
-                    logger.info("Watch service closed for: {}", path);
-                }
+                logger.info("Watch service closed for: {}", path);
             } catch (Exception ex) {
                 logger.warn(ex.getMessage());
                 continue;

@@ -25,7 +25,7 @@ public class SampleBookServiceImpl implements SampleBookService {
         try {
             FileUtils.copyDirectory(booksample, destDir);
         } catch (IOException e) {
-            logger.error("Problem occured while producing sample book", e);
+            logger.error("Problem occurred while producing sample book", e);
         }
 
     }

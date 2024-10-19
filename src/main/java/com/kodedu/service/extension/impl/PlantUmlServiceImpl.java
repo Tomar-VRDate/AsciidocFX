@@ -130,7 +130,7 @@ public class PlantUmlServiceImpl implements PlantUmlService {
 
                 logger.debug("UML extension is ended for {}", imageTarget);
             } catch (Exception e) {
-                logger.error("Problem occured while generating UML diagram", e);
+                logger.error("Problem occurred while generating UML diagram", e);
             } finally {
                 IOHelper.close(os);
             }
@@ -138,7 +138,7 @@ public class PlantUmlServiceImpl implements PlantUmlService {
             current.getCache().put(imageTarget, hashCode);
 
         } catch (Exception e) {
-            logger.error("Problem occured while generating UML diagram", e);
+            logger.error("Problem occurred while generating UML diagram", e);
         }
     }
 

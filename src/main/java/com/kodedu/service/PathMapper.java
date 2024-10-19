@@ -79,11 +79,8 @@ public class PathMapper {
             logger.info("Indexing.. {}", path);
 
             try (Stream<Path> pathStream = IOHelper.walk(path);) {
-                pathStream
-                        .filter(p -> !Files.isDirectory(p))
-                        .forEach(p -> {
-                            this.addPath(p);
-                        });
+                pathStream.filter(p -> !Files.isDirectory(p))
+                        .forEach(this::addPath);
                 logger.info("Indexing completed.. {}", path);
             }
         });

@@ -217,7 +217,7 @@ public class FileBrowseServiceImpl implements FileBrowseService {
                 });
 
             } catch (Exception e) {
-                logger.warn("Problem occured while updating file browser", e);
+                logger.warn("Problem occurred while updating file browser", e);
             }
 
         });

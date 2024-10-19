@@ -112,7 +112,7 @@ public class AsciidocConfigMerger {
 
             return finalBuilder.build();
         } catch (Exception e) {
-            logger.error("Problem occured while merging options", e);
+            logger.error("Problem occurred while merging options", e);
         }
         return config;
     }

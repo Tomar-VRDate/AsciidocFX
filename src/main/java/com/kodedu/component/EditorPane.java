@@ -389,7 +389,7 @@ public class EditorPane extends AnchorPane {
             try {
                 executeScript(String.format("moveCursorTo(%s)", lineno));
             } catch (Exception e) {
-                logger.error("Error occured while moving cursor to line {}", lineno);
+                logger.error("Error occurred while moving cursor to line {}", lineno);
             }
             viewPanelOptional.ifPresent(ViewPanel::enableScrollingAndJumping);
         }

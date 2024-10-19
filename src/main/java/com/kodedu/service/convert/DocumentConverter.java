@@ -10,7 +10,7 @@ import java.util.function.Consumer;
  */
 public interface DocumentConverter<T> {
 
-    public void convert(boolean askPath, Consumer<T>... nextStep);
+    void convert(boolean askPath, Consumer<T>... nextStep);
 
     default void onSuccessfulConversation(Consumer<RenderResult>[] nextSteps, File destFile) {
         for (Consumer<RenderResult> consumer : nextSteps) {

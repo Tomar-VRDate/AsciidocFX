@@ -35,6 +35,6 @@ public class KeyPairs {
             return combination.match(event);
         }
 
-        return Arrays.stream(keyCodes).filter(k -> event.getCode() == k).findAny().isPresent();
+        return Arrays.stream(keyCodes).anyMatch(k -> event.getCode() == k);
     }
 }

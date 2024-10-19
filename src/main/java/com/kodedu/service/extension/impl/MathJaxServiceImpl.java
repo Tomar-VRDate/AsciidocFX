@@ -172,7 +172,7 @@ public class MathJaxServiceImpl implements MathJaxService {
                         logger.debug("MathJax extension is ended for {}", imageTargetStr);
 
                     } catch (Exception e) {
-                        logger.error("Problem occured while generating MathJax png", e);
+                        logger.error("Problem occurred while generating MathJax png", e);
                         completeSnapShot(completableFuture, e);
                         throw new RuntimeException(e);
                     }
@@ -181,7 +181,7 @@ public class MathJaxServiceImpl implements MathJaxService {
                 completeSnapShot(completableFuture);
             }
         } catch (Exception e) {
-            logger.error("Problem occured while generating MathJax png", e);
+            logger.error("Problem occurred while generating MathJax png", e);
             completeSnapShot(completableFuture, e);
             throw e;
         }

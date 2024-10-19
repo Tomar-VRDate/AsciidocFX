@@ -83,7 +83,7 @@ public class DocbookValidator {
                 });
                 logger.error("Please fix Docbook validation error. LineNumber: {}, Column: {}", lineNumber, columnNumber, pe);
             } else {
-                logger.error("Problem occured while validating Docbook content", e);
+                logger.error("Problem occurred while validating Docbook content", e);
             }
 
             indikatorService.stopProgressBar();

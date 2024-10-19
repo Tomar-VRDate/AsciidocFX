@@ -2,6 +2,8 @@ package com.kodedu.service;
 
 import com.kodedu.helper.IOHelper;
 import org.asciidoctor.Asciidoctor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.context.event.EventListener;
@@ -24,18 +26,19 @@ import static org.springframework.core.Ordered.HIGHEST_PRECEDENCE;
 
 @Component
 public class AsciidoctorFactory {
-    private static CountDownLatch plainDoctorReady = new CountDownLatch(1);
-    private static CountDownLatch revealDoctorReady = new CountDownLatch(1);
-    private static CountDownLatch htmlDoctorReady = new CountDownLatch(1);
-    private static CountDownLatch nonHtmlDoctorReady = new CountDownLatch(1);
+    private static final Logger logger = LoggerFactory.getLogger(AsciidoctorFactory.class);
+    private static final CountDownLatch plainDoctorReady = new CountDownLatch(1);
+    private static final CountDownLatch revealDoctorReady = new CountDownLatch(1);
+    private static final CountDownLatch htmlDoctorReady = new CountDownLatch(1);
+    private static final CountDownLatch nonHtmlDoctorReady = new CountDownLatch(1);
     private static Asciidoctor plainDoctor;
     private static Asciidoctor revealDoctor;
     private static Asciidoctor htmlDoctor;
     private static Asciidoctor nonHtmlDoctor;
     private static DirectoryService directoryService;
-    private static Map<Asciidoctor, UserExtension> userExtensionMap = new ConcurrentHashMap<>();
+    private static final Map<Asciidoctor, UserExtension> userExtensionMap = new ConcurrentHashMap<>();
 
-    private static BlockingQueue<Asciidoctor> blockingQueue = new LinkedBlockingQueue<>(4);
+    private static final BlockingQueue<Asciidoctor> blockingQueue = new LinkedBlockingQueue<>(4);
 
     @EventListener
     @Order(HIGHEST_PRECEDENCE)
@@ -113,11 +116,17 @@ public class AsciidoctorFactory {
     public void initializeDoctors() {
         Thread.startVirtualThread(() -> {
             IntStream.rangeClosed(1, 4)
-                    .forEach(i -> {
-                        Asciidoctor asciidoctor = Asciidoctor.Factory.create();
-                        blockingQueue.add(asciidoctor);
-                    });
+                    .forEach(AsciidoctorFactory::initializeDoctor);
         });
+    }
+
+    private static void initializeDoctor(int retry) {
+        try {
+            Asciidoctor asciidoctor = Asciidoctor.Factory.create();
+            blockingQueue.add(asciidoctor);
+        }catch (Throwable t){
+            logger.error("Problem occurred while initializing asciidoctor retry {}",retry, t);
+        }
     }
 
     public static Asciidoctor getAsciidoctor() {

@@ -37,7 +37,7 @@ public class TooltipTimeFixServiceImpl implements TooltipTimeFixService {
             objTimer.getKeyFrames().clear();
             objTimer.getKeyFrames().add(new KeyFrame(new Duration(600)));
         } catch (Exception e) {
-            logger.debug("Problem occured while fixing tooltip time, but dont worry", e);
+            logger.debug("Problem occurred while fixing tooltip time, but dont worry", e);
         }
     }
 }

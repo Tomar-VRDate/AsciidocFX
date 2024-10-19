@@ -65,8 +65,9 @@ public class EpubConverter implements DocumentConverter<RenderResult> {
         this.epub3ConfigBean = epub3ConfigBean;
     }
 
+    @SafeVarargs
     @Override
-    public void convert(boolean askPath, Consumer<RenderResult>... nextStep) {
+    public final void convert(boolean askPath, Consumer<RenderResult>... nextStep) {
 
         String asciidoc = current.currentEditorValue();
 

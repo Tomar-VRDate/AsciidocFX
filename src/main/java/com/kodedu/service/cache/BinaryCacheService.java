@@ -6,13 +6,13 @@ import java.awt.image.BufferedImage;
  * Created by usta on 12.06.2016.
  */
 public interface BinaryCacheService {
-    public final static String label = "core::service::cache::BinaryCache";
+    String label = "core::service::cache::BinaryCache";
 
-    public String putBinary(String key, byte[] bytes);
+    String putBinary(String key, byte[] bytes);
 
-    public CacheData getCacheData(String key);
+    CacheData getCacheData(String key);
 
-    public void putBinary(String key, BufferedImage trimmed);
+    void putBinary(String key, BufferedImage trimmed);
 
-    public boolean hasCache(String key);
+    boolean hasCache(String key);
 }

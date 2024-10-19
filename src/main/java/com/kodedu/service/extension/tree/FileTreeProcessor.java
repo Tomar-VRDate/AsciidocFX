@@ -53,7 +53,7 @@ public class FileTreeProcessor {
         try {
             completableFuture.get(10, TimeUnit.SECONDS);
         } catch (Exception e) {
-            logger.error("Error occured during tree generation. {}", content, e);
+            logger.error("Error occurred during tree generation. {}", content, e);
         }
 
     }

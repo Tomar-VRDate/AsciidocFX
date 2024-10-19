@@ -56,8 +56,9 @@ public class HtmlBookConverter implements Traversable, DocumentConverter<RenderR
         this.converterProvider = converterProvider;
     }
 
+    @SafeVarargs
     @Override
-    public void convert(boolean askPath, Consumer<RenderResult>... nextStep) {
+    public final void convert(boolean askPath, Consumer<RenderResult>... nextStep) {
 
         try {
 
@@ -92,7 +93,7 @@ public class HtmlBookConverter implements Traversable, DocumentConverter<RenderR
             logger.debug("HTML conversion ended");
             onSuccessfulConversation(nextStep, destFile);
         } catch (Exception e) {
-            logger.error("Problem occured while converting to HTML", e);
+            logger.error("Problem occurred while converting to HTML", e);
             onFailedConversation(nextStep, e);
         } finally {
             indikatorService.stopProgressBar();
